@@ -8,7 +8,7 @@ from timebudget import timebudget
 import pandas as pd
 
 
-conn = sqlite3.connect('EMFAC_database_se.db')
+conn = sqlite3.connect('EMFAC_database.db')
 c = conn.cursor()
 @timebudget  # Record how long this function takes
 def importcsv():
@@ -24,11 +24,12 @@ def importcsv():
         print(table_name)
         if table_name.startswith("se"):
             df = pd.read_csv(files, usecols = columns_se)
+            # df[["Relative Humidity"]] = df[["Relative Humidity"]].apply(pd.to_numeric())
         else:
             df = pd.read_csv(files, usecols = columns)
         # print(df.head(100))
 
-        df.to_sql(name=table_name, con=conn, if_exists='append', index=False)
+        df.to_sql(name=table_name, con=conn, if_exists='replace', index=False)
 
         # return df, table_name
 
