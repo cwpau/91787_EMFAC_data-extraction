@@ -233,6 +233,8 @@ def step2_addspeed():
         else:
             print("RUN mode input is incorrect")
         newlist = [list(item) for item in product(lists, speed)]
+        
+        label2.config(text="Step 2 completed")
 
     if emission.get() == "running":
         df2 = pd.DataFrame(data=newlist, columns=["metdata", "Vehicle Speed"])
@@ -252,8 +254,9 @@ def step3_lookupdatabase():
     global df_db
     label3_1 = Label(win, text="Select Database", font='Aerial 11')
     label3_1.pack(side=TOP)
-    label3 = Label(win, text="Step3 NOT completed", font='Aerial 11')
+    label3 = Label(win, text="Step3 in progress. This step takes approximately 1 minute, please wait until the step is completed before proceeding...", font='Aerial 11')
     label3.pack(side= TOP)
+    win.update()
 
     root = Tk()
     root.withdraw()
@@ -266,8 +269,6 @@ def step3_lookupdatabase():
     else:
         dblocation="EMFAC_database.db"
         label3_1.config(text="No database is selected. The default local database is used.")
-
-    label3.config(text="This step takes approximately 1 minute, please wait until the step is completed before proceeding...")
 
     conn = sqlite3.connect(f'{dblocation}') #database connection
     cur = conn.cursor()
@@ -330,6 +331,10 @@ def step3_lookupdatabase():
 def step4_joindata():
     global df_resultforoutput
     global df_combinations
+    # Add a Label widget to display file inputted
+    label4 = Label(win, text="Step4 in progress", font='Aerial 11')
+    label4.pack(side= TOP)
+    win.update()
     listofreceivers = ["PCALL",
                        "TAXIALL",
                        "LGV3ALL",
@@ -381,8 +386,6 @@ def step4_joindata():
     export(df_resultforoutput, filename)
 
     # Add a Label widget to display file inputted
-    label4 = Label(win, text="Step4 NOT completed", font='Aerial 11')
-    label4.pack(side= TOP)
     label4.config(text="Export Completed, you may quit the application")
 # Create an instance of tkinter frame or window
 win = Tk()
