@@ -31,8 +31,6 @@ def get_temp_RH(df_temp_RH):
     months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
     for i in range(12):  # 0-11 -> Jan-Dec
         M = i + 1
-        # print(M)    #month
-        # print(months[i])
         df = (df_temp_RH.loc[:, df_temp_RH.columns.str.endswith(months[i])])
         df_lowest_temp = df.loc[:, df.columns.str.contains("Lowest")]
         df_avg_temp = df.loc[:, df.columns.str.contains("Average")]
@@ -126,6 +124,9 @@ def year_limit(year):
 def step1_getmetdata():
     global df_lowest, df_average
     print(year.get())
+    # Add a Label widget to display file inputted
+    label1 = Label(win, text="Step1 NOT completed", font='Aerial 11')
+    label1.pack(side= TOP)
 
     root = Tk()
     root.withdraw()
@@ -137,10 +138,6 @@ def step1_getmetdata():
     df_temp_RH = pd.read_excel(file1, index_col=None, na_values=['NA'], sheet_name ='All', engine="openpyxl", skiprows = 1)
     pd.set_option('display.max_rows', None)
 
-    # folderpath = filesopened[0].rsplit("/",1)[0]
-    # print(folderpath)
-    #
-
     ###preprocess
     df_temp_RH = df_temp_RH.round()  # round-off to nearest integer
     print(df_temp_RH)
@@ -148,32 +145,17 @@ def step1_getmetdata():
     print(df_temp_RH)
 
     ###Input Keys
-
     cases_lowest = ['RH_Lowest_', 'TEMP_Lowest_']
     cases_average = ['RH_Average_', 'TEMP_Average_']
     months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
 
-    # target_columns = ["Speed", "PC.4", "TAXI.4", "LGV3.4", "LGV4.4", "LGV6.4", "HGV7.4", "HGV8.4",
-    #                   "PLB.4", "PV4.4", "PV5.4", "NFB6.4", "NFB7.4", "NFB8.4", "FBSD.4", "FBDD.4",
-    #                   "MC.4", "HGV9.4", "NFB9.4"]  # "ALL", "ALL.1", "ALL.2", "ALL.3", "ALL.4"
-    #
-    # target_pollutants = ["Pollutant Name: Oxides of Nitrogen", "Pollutant Name: PM30", "Pollutant Name: PM10",
-    #                      "Pollutant Name: PM2.5", "Pollutant Name: Nitrogen Dioxide"]
-    #
-    # colname_lowest = get_col_name(cases_lowest, months)
-    # colname_average = get_col_name(cases_average, months)
-
-    # print(colname_lowest)  # col_name = columns at input excel worksheet to look for respective TEMP and RH at each hour
     ###Create df with temp, RH
-    df_ = get_temp_RH(df_temp_RH)
+    df_ = get_temp_RH(df_temp_RH)   #actual function
     df_lowest = df_[0]
     df_average = df_[1]
-    # print(df_lowest)
     #BOTH lowest and average data is ready and imported;
 
     # Add a Label widget to display file inputted
-    label1 = Label(win, text="Step1", font='Aerial 11')
-    label1.pack(side= TOP)
     label1.config(text="File loaded: "+file1)
 
 @timebudget
@@ -181,7 +163,7 @@ def step2_addspeed():
     global unique_speed
     global df_combinations
     # Add a Label widget to display file inputted
-    label2 = Label(win, text="Step2", font='Aerial 11')
+    label2 = Label(win, text="Step2 NOT completed", font='Aerial 11')
     label2.pack(side= TOP)
 
     if emission.get() == "running":
@@ -200,31 +182,20 @@ def step2_addspeed():
         print("SPEED", speed.head(24))
         print(speed.dtypes)
 
-
-
-
         new_index = range(1,25)
         speed.index = new_index
         print("df apply unique", speed)
-        # print(type(speed))      #speed is pandas.series with element=list
+        # print(type(speed))  #speed is pandas.series with index:element col1:list of unique values
         # print(speed.loc[1]) #exact list we want
 
-        #superceded, this gives a list of all uniques speeds in df
+        #this gives a list of all uniques speeds in df
         l = list(chain.from_iterable(speed))
         l = np.array(l)
-        # print("l:", l)
-        # print(df_average)
+        # important global variable unique_speed
         unique_speed = np.unique(l) #np array
-        # print("unique_speed", unique_speed)
-        # speed = list(unique_speed)
         ### speed = speed.loc[1]    #OK to simply select speed corresponding to HOUR in number/integer
-
-        print(speed)
-        print(speed[9])
         label2.config(text="File loaded: "+file2)
 
-        # data = {'Month': [1, 1, 1, 1], 'Hour': [1, 2, 3, 4], 'Temp': [15, 15, 15, 14], 'RH': [58, 58, 59, 59]}
-        # df = pd.DataFrame(data=data)
         if mode.get().lower() == "average":
             records = df_average.to_records(index=False)
             lists = df_average.values.tolist()
@@ -243,25 +214,10 @@ def step2_addspeed():
             for list_x in lists:
                 if list_x[1] == element:
                     listinhours.append(list_x)
-            # print("a",listinhours)
-            # print("b",speed.loc[element])
+
             b = speed.loc[element].tolist() #speed is not usable as pandas.Series, hence converted to list
             newlist.extend([list(item) for item in product(listinhours, b)])
         print("NEWLISTS:",newlist)      ## list of [[day, hr, temp, rh], speed]
-
-        # listoftuples = list(records)          #in list of tuples
-        # print("RESULTS", listoftuples)  # df
-
-        # tuple_tail = lambda (mo,hr,temp,rh) : hr
-        # listoftuples.sort(key=tuple_tail)
-        # print(filter(lambda item: len(item) > 1, [list(group) for key, group in groupby(listoftuples, tuple_tail)]))
-
-        # list_for_product_hr1 =
-        #
-        # newlist = [list(item) for item in product(lists, speed)]
-        # print(newlist)
-        # print(len(newlist))
-
 
     elif emission.get() == "starting":
         speed = [5,10,20,30,40,50,60,120,180,240,300,360,420,480,540,600,660,720]
@@ -276,17 +232,10 @@ def step2_addspeed():
             print("LISTS", lists)
         else:
             print("RUN mode input is incorrect")
-        # print(lists)
         newlist = [list(item) for item in product(lists, speed)]
-
-
-
-
-
 
     if emission.get() == "running":
         df2 = pd.DataFrame(data=newlist, columns=["metdata", "Vehicle Speed"])
-        # print("DF2", df2)
         df_combinations = pd.DataFrame(df2["metdata"].to_list(), columns=["Month", "Hour", "Temperature", "Relative Humidity"])
         df_combinations["Vehicle Speed"] = df2["Vehicle Speed"].to_numpy()
     else:
@@ -303,7 +252,7 @@ def step3_lookupdatabase():
     global df_db
     label3_1 = Label(win, text="Select Database", font='Aerial 11')
     label3_1.pack(side=TOP)
-    label3 = Label(win, text="Step3", font='Aerial 11')
+    label3 = Label(win, text="Step3 NOT completed", font='Aerial 11')
     label3.pack(side= TOP)
 
     root = Tk()
@@ -341,12 +290,8 @@ def step3_lookupdatabase():
             # print("DF_TEMP:",df_temp)
             if count == 0:
                 df_db = df_temp
-                # print("AFTER UPDATE:", df_db)
-                # df_db = df_db.join(df_temp, how="left", rsuffix="_"+table_x)
             else:
                 df_db = pd.merge(df_db, df_temp, on = ["Emfac Version", "Emfac Year", "Vehicle Speed", "Temperature", "Relative Humidity"])
-                # print("DF_DB after join:", df_db)
-                # df_db = pd.concat([df_db, df])
             count += 1
 
     elif emission.get() == "starting":
@@ -365,29 +310,21 @@ def step3_lookupdatabase():
 
             if count == 0:
                 df_db = df_temp
-
-                # print("AFTER UPDATE:", df_db)
-                # df_db = df_db.join(df_temp, how="left", rsuffix="_"+table_x)
             else:
-
                 df_db = pd.merge(df_db, df_temp, on = ["Emfac Version", "Emfac Year", "Temperature", "Relative Humidity", "Time"])
                 pd.options.display.max_rows = 24
-                # print("DF_DB after join:", df_db)
-
-                # df_db = pd.concat([df_db, df])
             count += 1
 
     # df_db.to_excel("database_overview.xlsx")
     # print(df_db.head(1000)) #running/starting data of all5 pollutants
     # Be sure to close the connection
     conn.close()
-
+    # Add a Label widget to display file inputted
+    label3.config(text="Query Completed")
 
     # https://stackoverflow.com/questions/283645/python-list-in-sql-query-as-parameter
 
-    # Add a Label widget to display file inputted
 
-    label3.config(text="Query Completed")
 
 @timebudget
 def step4_joindata():
@@ -441,14 +378,10 @@ def step4_joindata():
     print(df_resultforoutput.columns)
 
     filename = str(year.get())+"_"+str(mode.get())+"_"+str(emission.get())
-    ###option1:
     export(df_resultforoutput, filename)
-    # ###option2:
-    # df_resultforoutput.to_excel(f"{filename}.xlsx")
-
 
     # Add a Label widget to display file inputted
-    label4 = Label(win, text="Step4", font='Aerial 11')
+    label4 = Label(win, text="Step4 NOT completed", font='Aerial 11')
     label4.pack(side= TOP)
     label4.config(text="Export Completed, you may quit the application")
 # Create an instance of tkinter frame or window
@@ -456,7 +389,6 @@ win = Tk()
 
 # Set the geometry of tkinter frame
 win.geometry("900x1000")
-
 
 # store user input
 year = StringVar()
@@ -479,9 +411,6 @@ year_entry.focus()
 # mode entry
 mode_label = ttk.Label(enter, text="Run Mode (lowest/average):")
 mode_label.pack(fill=None, expand=False)
-# mode_entry = ttk.Entry(enter, textvariable=mode, validate='key')  # text variable is stored in variable 'mode', no constraint
-# mode_entry.pack(fill=None, expand=False)
-# mode_entry.focus()
 
 mode = StringVar(enter)
 mode.set("lowest") # default value
@@ -491,14 +420,11 @@ mode_drop.pack()
 
 emission_label = ttk.Label(enter, text="Emission Mode (running/starting):")
 emission_label.pack(fill=None, expand=False)
-# emission_entry = ttk.Entry(enter, textvariable=emission, validate='key')  # text variable is stored in variable 'mode', no constraint
-# emission_entry.pack(fill=None, expand=False)
-# emission_entry.focus()
+
 emission = StringVar(enter)
 emission.set("running") # default value
 emission_drop = OptionMenu(enter, emission, "running", "starting")
 emission_drop.pack()
-
 
 # Destroy window when click cross
 win.protocol("WM_DELETE_WINDOW", Close)
@@ -506,7 +432,6 @@ win.protocol("WM_DELETE_WINDOW", Close)
 # Add a Label widget
 label = Label(win, text="Enter the Year of Study, Run Mode, Emission Mode and proceed step-by-step below", font='Aerial 11')
 label.pack(pady=5)
-
 
 # Add a Button Widget
 ttk.Button(win, text="RUN STEP1: Select the Excel File with RH and Temp Data", command=step1_getmetdata).pack(side= TOP, pady=10, ipady=20)
@@ -516,8 +441,6 @@ ttk.Button(win, text="RUN STEP2: Select the Speed file (Enter correct Year in us
 ttk.Button(win, text="RUN STEP3: Query data from database", command=step3_lookupdatabase).pack(side= TOP, pady=10, ipady=20)
 
 ttk.Button(win, text="RUN STEP4: Lookup and Export Result as Excel", command=step4_joindata).pack(side= TOP, pady=10, ipady=20)
-
-
 
 
 win.mainloop()
