@@ -6,3 +6,4 @@ EMFAC-HK Emission Factor Database (V4.3), Summary and Working Example
 https://www.epd.gov.hk/epd/english/aqia/application-air-quality-impact-assessment.html
 
 <a href="https://github.com/cwpau/91787_EMFAC_data-extraction/blob/main/EMFAC%20Data%20Extraction_User%20Manual.pdf" class="image fit"><img src="https://github.com/cwpau/91787_EMFAC_data-extraction/blob/main/EMFAC%20Data%20Extraction_User%20Manual.pdf" alt=""></a>
+[embed][http://example.com/file.pdf](https://github.com/cwpau/91787_EMFAC_data-extraction/blob/main/EMFAC%20Data%20Extraction_User%20Manual.pdf)https://github.com/cwpau/91787_EMFAC_data-extraction/blob/main/EMFAC%20Data%20Extraction_User%20Manual.pdf[/embed]
