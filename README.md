@@ -4,3 +4,5 @@ Input files (50GB excel files) to create database can be obtained from the websi
 
 EMFAC-HK Emission Factor Database (V4.3), Summary and Working Example 
 https://www.epd.gov.hk/epd/english/aqia/application-air-quality-impact-assessment.html
+
+<a href="EMFAC Data Extraction_User Manual.pdf" class="image fit"><img src="images/marr_pic.jpg" alt=""></a>
